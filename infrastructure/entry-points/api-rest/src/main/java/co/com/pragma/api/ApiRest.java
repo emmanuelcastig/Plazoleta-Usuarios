@@ -9,10 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 @Slf4j
 @RestController
 @RequestMapping(value = "/api/v1", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -28,5 +26,12 @@ public class ApiRest {
         log.info("Iniciando creacion de propietario: {}", propietarioRequest.getNombre());
         propietarioUseCase.crearPropietario(propietarioMapper.toDomain(propietarioRequest));
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @GetMapping(path = "/propietarios/{id}")
+    public ResponseEntity<Boolean> obtenerPropietario(@PathVariable("id") Long id) {
+        log.info("Verificando existencia de propietario con id: {}", id);
+        boolean existe = propietarioUseCase.propietarioExiste(id);
+        return ResponseEntity.ok(existe);
     }
 }

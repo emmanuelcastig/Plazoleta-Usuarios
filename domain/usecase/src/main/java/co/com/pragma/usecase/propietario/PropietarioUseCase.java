@@ -6,6 +6,7 @@ import co.com.pragma.model.propietario.gateways.PropietarioRepository;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 public class PropietarioUseCase {
@@ -23,5 +24,15 @@ public class PropietarioUseCase {
             throw new IllegalArgumentException("El propietario debe ser mayor de edad");
         }
         return true;
+    }
+
+    public boolean propietarioExiste(Long id) {
+        Optional<Propietario> propietario = propietarioRepository.propietarioExiste(id);
+        if (propietario.isPresent()) {
+            if (propietario.get().getRol().equals(Roles.PROPIETARIO)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
