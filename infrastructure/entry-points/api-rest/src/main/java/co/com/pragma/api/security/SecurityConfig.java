@@ -26,6 +26,7 @@ public class SecurityConfig {
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
                         .requestMatchers("/api/v1/propietarios/*").hasRole("ADMINISTRADOR")
                         .requestMatchers("/api/v1/propietarios").hasRole("ADMINISTRADOR")
+                        .requestMatchers("/api/v1/empleados").hasRole("PROPIETARIO")
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(new CustomAuthenticationEntryPoint()))
