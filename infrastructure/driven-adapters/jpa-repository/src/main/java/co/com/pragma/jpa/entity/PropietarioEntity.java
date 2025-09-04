@@ -24,6 +24,7 @@ public class PropietarioEntity {
     private String documentoIdentidad;
     private String celular;
     private LocalDate fechaNacimiento;
+    @Column(nullable = false, unique = true)
     private String correo;
     private String clave;
     @Enumerated(EnumType.STRING)

@@ -24,6 +24,13 @@ public class GlobalHandlerException {
         return error;
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Map<String, Object>> handleIllegalArgument(IllegalArgumentException ex) {
+        Map<String, Object> response = buildResponse(HttpStatus.CONFLICT, ex.getMessage());
+        response.put("error", "Error de negocio");
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+    }
+
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handleValidationErrors(MethodArgumentNotValidException ex) {

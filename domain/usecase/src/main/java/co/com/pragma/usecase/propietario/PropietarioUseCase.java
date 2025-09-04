@@ -2,6 +2,7 @@ package co.com.pragma.usecase.propietario;
 
 import co.com.pragma.model.propietario.Propietario;
 import co.com.pragma.model.propietario.enums.Roles;
+import co.com.pragma.model.propietario.gateways.PasswordService;
 import co.com.pragma.model.propietario.gateways.PropietarioRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -11,8 +12,10 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PropietarioUseCase {
     private final PropietarioRepository propietarioRepository;
+    private final PasswordService passwordService;
 
     public void crearPropietario(Propietario propietario) {
+        propietario.setClave(passwordService.encode(propietario.getClave()));
         if (validarEdadPropietario(propietario)){
             propietario.setRol(Roles.PROPIETARIO);
             propietarioRepository.crearPropietario(propietario);

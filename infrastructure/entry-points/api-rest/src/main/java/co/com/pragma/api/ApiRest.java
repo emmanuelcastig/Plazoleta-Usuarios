@@ -25,6 +25,7 @@ public class ApiRest {
     public ResponseEntity crearPropietario(@RequestBody @Valid PropietarioRequest propietarioRequest) {
         log.info("Iniciando creacion de propietario: {}", propietarioRequest.getNombre());
         propietarioUseCase.crearPropietario(propietarioMapper.toDomain(propietarioRequest));
+        log.info("Propietario creado con exito: {}", propietarioRequest.getNombre());
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -32,6 +33,7 @@ public class ApiRest {
     public ResponseEntity<Boolean> obtenerPropietario(@PathVariable("id") Long id) {
         log.info("Verificando existencia de propietario con id: {}", id);
         boolean existe = propietarioUseCase.propietarioExiste(id);
+        log.info("Existencia de propietario: {}", existe);
         return ResponseEntity.ok(existe);
     }
 }

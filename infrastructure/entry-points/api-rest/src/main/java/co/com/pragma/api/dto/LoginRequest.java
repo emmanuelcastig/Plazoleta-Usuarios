@@ -9,7 +9,7 @@ public class LoginRequest {
 
     @NotBlank
     @Email
-    private String email;
+    private String correo;
 
     @NotBlank
     private String clave;
