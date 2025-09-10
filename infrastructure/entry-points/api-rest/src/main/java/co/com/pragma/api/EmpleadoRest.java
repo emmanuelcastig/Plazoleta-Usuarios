@@ -1,4 +1,4 @@
-package co.com.pragma.api.security;
+package co.com.pragma.api;
 
 import co.com.pragma.api.dto.EmpleadoRequest;
 import co.com.pragma.api.mapper.EmpleadoMapper;
