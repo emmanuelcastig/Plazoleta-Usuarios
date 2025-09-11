@@ -1,4 +1,4 @@
-package co.com.pragma.usecase.propietario.autenticacion;
+package co.com.pragma.usecase.autenticacion;
 
 import co.com.pragma.model.cliente.gateways.ClienteRepository;
 import co.com.pragma.model.empleado.gateways.EmpleadoRepository;
