@@ -40,5 +40,4 @@ public class SecurityConfig {
         return new JwtAuthenticationManager(jwtProvider);
     }
 
-
 }
