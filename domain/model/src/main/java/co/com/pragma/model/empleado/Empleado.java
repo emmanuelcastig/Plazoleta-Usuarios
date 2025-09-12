@@ -20,4 +20,5 @@ public class Empleado {
     private String correo;
     private Roles rol;
     private String clave;
+    private Long idRestaurante;
 }

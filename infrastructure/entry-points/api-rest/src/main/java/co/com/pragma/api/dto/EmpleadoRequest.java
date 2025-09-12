@@ -2,6 +2,7 @@ package co.com.pragma.api.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
@@ -30,4 +31,7 @@ public class EmpleadoRequest {
 
     @NotBlank(message = "La clave no puede estar vacía")
     private String clave;
+
+    @NotNull(message = "el idRestaurante no puede estar vacío")
+    private Long idRestaurante;
 }

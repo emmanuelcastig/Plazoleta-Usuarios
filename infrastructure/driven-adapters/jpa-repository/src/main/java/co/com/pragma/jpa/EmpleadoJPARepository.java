@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface EmpleadoJPARepository extends CrudRepository<EmpleadoEntity, Long>,
         QueryByExampleExecutor<EmpleadoEntity> {
     Optional<EmpleadoEntity> findByCorreo(String correo);
+
 }

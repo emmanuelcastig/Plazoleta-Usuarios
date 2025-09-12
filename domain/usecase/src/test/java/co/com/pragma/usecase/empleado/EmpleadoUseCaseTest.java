@@ -58,4 +58,32 @@ class EmpleadoUseCaseTest {
 
         verify(empleadoRepository, never()).crearEmpleado(any());
     }
+
+    @Test
+    void buscarEmpleadoPorId_debeRetornarEmpleadoCuandoExiste() {
+        Empleado empleado = new Empleado();
+        empleado.setId(1L);
+        empleado.setNombre("Ana");
+
+        when(empleadoRepository.buscarEmpleadoPorId(1L))
+                .thenReturn(java.util.Optional.of(empleado));
+
+        Empleado resultado = empleadoUseCase.buscarEmpleadoPorId(1L);
+
+        assertThat(resultado).isNotNull();
+        assertThat(resultado.getNombre()).isEqualTo("Ana");
+        verify(empleadoRepository).buscarEmpleadoPorId(1L);
+    }
+
+    @Test
+    void buscarEmpleadoPorId_debeRetornarNullCuandoNoExiste() {
+        when(empleadoRepository.buscarEmpleadoPorId(99L))
+                .thenReturn(java.util.Optional.empty());
+
+        Empleado resultado = empleadoUseCase.buscarEmpleadoPorId(99L);
+
+        assertThat(resultado).isNull();
+        verify(empleadoRepository).buscarEmpleadoPorId(99L);
+    }
+
 }

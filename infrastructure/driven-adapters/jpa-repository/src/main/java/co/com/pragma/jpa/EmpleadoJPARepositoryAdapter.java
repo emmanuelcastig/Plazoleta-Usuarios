@@ -30,4 +30,9 @@ implements EmpleadoRepository
     public Optional<Empleado> buscarEmpleadoPorCorreo(String correo) {
         return repository.findByCorreo(correo).map(this::toEntity);
     }
+
+    @Override
+    public Optional<Empleado> buscarEmpleadoPorId(Long id) {
+        return repository.findById(id).map(this::toEntity);
+    }
 }

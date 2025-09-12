@@ -28,6 +28,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/propietarios").hasRole("ADMINISTRADOR")
                         .requestMatchers("/api/v1/empleados").hasRole("PROPIETARIO")
                         .requestMatchers("/api/v1/clientes").hasAnyRole("PROPIETARIO", "EMPLEADO")
+                        .requestMatchers("/api/v1/empleados/*/restaurante").hasRole("EMPLEADO")
+
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(new CustomAuthenticationEntryPoint()))

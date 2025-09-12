@@ -7,4 +7,5 @@ import java.util.Optional;
 public interface EmpleadoRepository {
     void crearEmpleado(Empleado empleado);
     Optional<Empleado> buscarEmpleadoPorCorreo(String correo);
+    Optional<Empleado> buscarEmpleadoPorId(Long id);
 }

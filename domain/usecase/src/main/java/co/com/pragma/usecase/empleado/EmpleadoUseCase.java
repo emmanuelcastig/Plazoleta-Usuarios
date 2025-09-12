@@ -15,4 +15,8 @@ public class EmpleadoUseCase {
         empleado.setRol(Roles.EMPLEADO);
         empleadoRepository.crearEmpleado(empleado);
     }
+
+    public Empleado buscarEmpleadoPorId(Long id) {
+        return empleadoRepository.buscarEmpleadoPorId(id).orElse(null);
+    }
 }
