@@ -1,5 +1,7 @@
 package co.com.pragma.model.propietario.gateways;
 
-public interface PropietarioRepository {
+import co.com.pragma.model.propietario.Propietario;
 
+public interface PropietarioRepository {
+    void crearPropietario(Propietario propietario);
 }

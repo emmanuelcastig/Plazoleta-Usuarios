@@ -3,8 +3,7 @@ package co.com.pragma.model.propietario.enums;
 public enum Roles {
     ADMINISTRADOR("ADMINISTRADOR"),
     PROPIETARIO("PROPIETARIO"),
-    EMPLEADO("EMPLEADO"),
-    CLIENTE("CLIENTE");
+    EMPLEADO("EMPLEADO");
 
     private final String nombre;
 
