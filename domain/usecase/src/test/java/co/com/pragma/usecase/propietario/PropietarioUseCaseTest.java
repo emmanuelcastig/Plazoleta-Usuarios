@@ -3,7 +3,8 @@ package co.com.pragma.usecase.propietario;
 import co.com.pragma.model.propietario.Propietario;
 import co.com.pragma.model.propietario.enums.Roles;
 import co.com.pragma.model.propietario.gateways.PasswordService;
-import co.com.pragma.model.propietario.gateways.PropietarioRepository;
+import co.com.pragma.model.usuario.Usuario;
+import co.com.pragma.model.usuario.gateways.UsuarioRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -16,15 +17,15 @@ import static org.mockito.Mockito.*;
 
 class PropietarioUseCaseTest {
 
-    private PropietarioRepository propietarioRepository;
+    private UsuarioRepository usuarioRepository;
     private PasswordService passwordService;
     private PropietarioUseCase propietarioUseCase;
 
     @BeforeEach
     void setUp() {
-        propietarioRepository = mock(PropietarioRepository.class);
+        usuarioRepository = mock(UsuarioRepository.class);
         passwordService = mock(PasswordService.class);
-        propietarioUseCase = new PropietarioUseCase(propietarioRepository, passwordService);
+        propietarioUseCase = new PropietarioUseCase(usuarioRepository, passwordService);
     }
 
     @Test
@@ -38,10 +39,10 @@ class PropietarioUseCaseTest {
 
         propietarioUseCase.crearPropietario(propietario);
 
-        ArgumentCaptor<Propietario> captor = ArgumentCaptor.forClass(Propietario.class);
-        verify(propietarioRepository).crearPropietario(captor.capture());
+        ArgumentCaptor<Usuario> captor = ArgumentCaptor.forClass(Usuario.class);
+        verify(usuarioRepository).crearUsuario(captor.capture());
 
-        Propietario guardado = captor.getValue();
+        Usuario guardado = captor.getValue();
         assertThat(guardado.getClave()).isEqualTo("claveEncriptada");
         assertThat(guardado.getRol()).isEqualTo(Roles.PROPIETARIO);
     }
@@ -51,7 +52,7 @@ class PropietarioUseCaseTest {
         Propietario propietario = new Propietario();
         propietario.setNombre("Luis");
         propietario.setClave("abcd");
-        propietario.setFechaNacimiento(LocalDate.now().minusYears(15)); 
+        propietario.setFechaNacimiento(LocalDate.now().minusYears(15));
 
         when(passwordService.encode("abcd")).thenReturn("claveEncriptada");
 
@@ -59,7 +60,7 @@ class PropietarioUseCaseTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("El propietario debe ser mayor de edad");
 
-        verify(propietarioRepository, never()).crearPropietario(any());
+        verify(usuarioRepository, never()).crearUsuario(any());
     }
 
     @Test
@@ -68,7 +69,7 @@ class PropietarioUseCaseTest {
         propietario.setId(1L);
         propietario.setRol(Roles.PROPIETARIO);
 
-        when(propietarioRepository.propietarioExiste(1L)).thenReturn(Optional.of(propietario));
+        when(usuarioRepository.buscarUsuarioPorId(1L)).thenReturn(Optional.of(propietario));
 
         boolean existe = propietarioUseCase.propietarioExiste(1L);
 
@@ -77,9 +78,22 @@ class PropietarioUseCaseTest {
 
     @Test
     void propietarioExiste_debeRetornarFalseCuandoNoExiste() {
-        when(propietarioRepository.propietarioExiste(1L)).thenReturn(Optional.empty());
+        when(usuarioRepository.buscarUsuarioPorId(1L)).thenReturn(Optional.empty());
 
         boolean existe = propietarioUseCase.propietarioExiste(1L);
+
+        assertThat(existe).isFalse();
+    }
+
+    @Test
+    void propietarioExiste_debeRetornarFalseCuandoExistePeroNoEsPropietario() {
+        Usuario usuario = new Usuario();
+        usuario.setId(2L);
+        usuario.setRol(Roles.CLIENTE);
+
+        when(usuarioRepository.buscarUsuarioPorId(2L)).thenReturn(Optional.of(usuario));
+
+        boolean existe = propietarioUseCase.propietarioExiste(2L);
 
         assertThat(existe).isFalse();
     }

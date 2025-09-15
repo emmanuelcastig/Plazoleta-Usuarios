@@ -3,7 +3,8 @@ package co.com.pragma.usecase.propietario;
 import co.com.pragma.model.propietario.Propietario;
 import co.com.pragma.model.propietario.enums.Roles;
 import co.com.pragma.model.propietario.gateways.PasswordService;
-import co.com.pragma.model.propietario.gateways.PropietarioRepository;
+import co.com.pragma.model.usuario.Usuario;
+import co.com.pragma.model.usuario.gateways.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
@@ -11,14 +12,14 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 public class PropietarioUseCase {
-    private final PropietarioRepository propietarioRepository;
+    private final UsuarioRepository usuarioRepository;
     private final PasswordService passwordService;
 
     public void crearPropietario(Propietario propietario) {
         propietario.setClave(passwordService.encode(propietario.getClave()));
         if (validarEdadPropietario(propietario)){
             propietario.setRol(Roles.PROPIETARIO);
-            propietarioRepository.crearPropietario(propietario);
+            usuarioRepository.crearUsuario(propietario);
         }
     }
 
@@ -30,7 +31,7 @@ public class PropietarioUseCase {
     }
 
     public boolean propietarioExiste(Long id) {
-        Optional<Propietario> propietario = propietarioRepository.propietarioExiste(id);
+        Optional<Usuario> propietario = usuarioRepository.buscarUsuarioPorId(id);
         if (propietario.isPresent()) {
             if (propietario.get().getRol().equals(Roles.PROPIETARIO)) {
                 return true;

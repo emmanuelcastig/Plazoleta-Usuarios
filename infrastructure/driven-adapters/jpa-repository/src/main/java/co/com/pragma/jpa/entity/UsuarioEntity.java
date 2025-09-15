@@ -7,13 +7,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-@Table(name = "clientes")
-public class ClienteEntity {
+@Table(name = "usuarios")
+public class UsuarioEntity {
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long id;
@@ -21,8 +23,11 @@ public class ClienteEntity {
     private String apellido;
     private String documentoIdentidad;
     private String celular;
+    private LocalDate fechaNacimiento;
+    @Column(nullable = false, unique = true)
     private String correo;
+    private String clave;
     @Enumerated(EnumType.STRING)
     private Roles rol;
-    private String clave;
+    private Long idRestaurante;
 }

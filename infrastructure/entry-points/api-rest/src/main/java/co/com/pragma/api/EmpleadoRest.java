@@ -2,8 +2,14 @@ package co.com.pragma.api;
 
 import co.com.pragma.api.dto.EmpleadoRequest;
 import co.com.pragma.api.mapper.EmpleadoMapper;
-import co.com.pragma.model.empleado.Empleado;
+import co.com.pragma.model.usuario.Usuario;
 import co.com.pragma.usecase.empleado.EmpleadoUseCase;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,12 +17,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Slf4j
 @RestController
@@ -74,7 +74,7 @@ public class EmpleadoRest {
     @GetMapping("/empleados/{id}/restaurante")
     public ResponseEntity<Long> obtenerRestauranteDeEmpleado(@PathVariable("id") Long id) {
         log.info("Iniciando busqueda de empleado");
-        Empleado empleado = empleadoUseCase.buscarEmpleadoPorId(id);
+        Usuario empleado = empleadoUseCase.buscarEmpleadoPorId(id);
         if (empleado == null || empleado.getIdRestaurante() == null) {
             return ResponseEntity.notFound().build();
         }
