@@ -8,6 +8,3 @@ dependencies {
     runtimeOnly 'org.postgresql:postgresql'
     testImplementation 'org.reactivecommons.utils:object-mapper:0.1.0'
 }
-compileJava {
-    options.compilerArgs << '-parameters'
-}
