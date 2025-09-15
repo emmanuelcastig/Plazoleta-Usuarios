@@ -1,5 +1,6 @@
 package co.com.pragma.api.exception;
 
+import co.com.pragma.usecase.exception.CredencialesInvalidasException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,14 @@ public class GlobalHandlerException {
     }
 
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Map<String, Object>> handleIllegalArgument(IllegalArgumentException ex) {
+        Map<String, Object> response = buildResponse(HttpStatus.CONFLICT, ex.getMessage());
+        response.put("error", "Error de negocio");
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+    }
+
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handleValidationErrors(MethodArgumentNotValidException ex) {
         Map<String, String> fieldErrors = new HashMap<>();
@@ -35,6 +44,12 @@ public class GlobalHandlerException {
         response.put("errors", fieldErrors);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    @ExceptionHandler(CredencialesInvalidasException.class)
+    public ResponseEntity<?> handleCredenciales(CredencialesInvalidasException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(buildResponse(HttpStatus.UNAUTHORIZED, ex.getMessage()));
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
@@ -52,6 +67,6 @@ public class GlobalHandlerException {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleGeneric(Exception ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Error inesperado" + ex.getMessage()));
+                .body(buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Error inesperado " + ex.getMessage()));
     }
 }

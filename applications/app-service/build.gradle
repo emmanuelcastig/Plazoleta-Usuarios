@@ -14,6 +14,10 @@ dependencies {
     implementation 'org.springframework.security:spring-security-crypto'
 }
 
+compileJava {
+    options.compilerArgs << '-parameters'
+}
+
 tasks.register('explodedJar', Copy) {
     with jar
     into layout.buildDirectory.dir("exploded")

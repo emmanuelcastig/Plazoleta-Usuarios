@@ -14,8 +14,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Getter
 @Setter
-@Table(name = "propietarios")
-public class PropietarioEntity {
+@Table(name = "usuarios")
+public class UsuarioEntity {
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long id;
@@ -24,8 +24,10 @@ public class PropietarioEntity {
     private String documentoIdentidad;
     private String celular;
     private LocalDate fechaNacimiento;
+    @Column(nullable = false, unique = true)
     private String correo;
     private String clave;
     @Enumerated(EnumType.STRING)
     private Roles rol;
+    private Long idRestaurante;
 }
