@@ -1,9 +1,9 @@
 package co.com.pragma.usecase.cliente;
 
 import co.com.pragma.model.cliente.Cliente;
-import co.com.pragma.model.cliente.gateways.ClienteRepository;
 import co.com.pragma.model.propietario.enums.Roles;
 import co.com.pragma.model.propietario.gateways.PasswordService;
+import co.com.pragma.model.usuario.gateways.UsuarioRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -15,14 +15,14 @@ import static org.mockito.Mockito.*;
 class ClienteUseCaseTest {
 
     private PasswordService passwordService;
-    private ClienteRepository clienteRepository;
+    private UsuarioRepository usuarioRepository;
     private ClienteUseCase clienteUseCase;
 
     @BeforeEach
     void setUp() {
         passwordService = mock(PasswordService.class);
-        clienteRepository = mock(ClienteRepository.class);
-        clienteUseCase = new ClienteUseCase(passwordService, clienteRepository);
+        usuarioRepository = mock(UsuarioRepository.class);
+        clienteUseCase = new ClienteUseCase(passwordService, usuarioRepository);
     }
 
     @Test
@@ -37,7 +37,7 @@ class ClienteUseCaseTest {
         clienteUseCase.crearCliente(cliente);
 
         ArgumentCaptor<Cliente> captor = ArgumentCaptor.forClass(Cliente.class);
-        verify(clienteRepository).crearCliente(captor.capture());
+        verify(usuarioRepository).crearUsuario(captor.capture());
 
         Cliente clienteGuardado = captor.getValue();
         assertThat(clienteGuardado.getClave()).isEqualTo("hashed_1234");
@@ -60,6 +60,6 @@ class ClienteUseCaseTest {
                 .isInstanceOf(RuntimeException.class)
                 .hasMessageContaining("Error al encriptar clave");
 
-        verify(clienteRepository, never()).crearCliente(any());
+        verify(usuarioRepository, never()).crearUsuario(any());
     }
 }

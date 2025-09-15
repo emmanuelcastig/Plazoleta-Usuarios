@@ -1,12 +1,15 @@
 package co.com.pragma.usecase.empleado;
 
 import co.com.pragma.model.empleado.Empleado;
-import co.com.pragma.model.empleado.gateways.EmpleadoRepository;
 import co.com.pragma.model.propietario.enums.Roles;
 import co.com.pragma.model.propietario.gateways.PasswordService;
+import co.com.pragma.model.usuario.Usuario;
+import co.com.pragma.model.usuario.gateways.UsuarioRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -15,14 +18,14 @@ import static org.mockito.Mockito.*;
 class EmpleadoUseCaseTest {
 
     private PasswordService passwordService;
-    private EmpleadoRepository empleadoRepository;
+    private UsuarioRepository usuarioRepository;
     private EmpleadoUseCase empleadoUseCase;
 
     @BeforeEach
     void setUp() {
         passwordService = mock(PasswordService.class);
-        empleadoRepository = mock(EmpleadoRepository.class);
-        empleadoUseCase = new EmpleadoUseCase(passwordService, empleadoRepository);
+        usuarioRepository = mock(UsuarioRepository.class);
+        empleadoUseCase = new EmpleadoUseCase(passwordService, usuarioRepository);
     }
 
     @Test
@@ -35,10 +38,10 @@ class EmpleadoUseCaseTest {
 
         empleadoUseCase.crearEmpleado(empleado);
 
-        ArgumentCaptor<Empleado> captor = ArgumentCaptor.forClass(Empleado.class);
-        verify(empleadoRepository).crearEmpleado(captor.capture());
+        ArgumentCaptor<Usuario> captor = ArgumentCaptor.forClass(Usuario.class);
+        verify(usuarioRepository).crearUsuario(captor.capture());
 
-        Empleado empleadoGuardado = captor.getValue();
+        Usuario empleadoGuardado = captor.getValue();
         assertThat(empleadoGuardado.getClave()).isEqualTo("encriptada123");
         assertThat(empleadoGuardado.getRol()).isEqualTo(Roles.EMPLEADO);
     }
@@ -56,7 +59,7 @@ class EmpleadoUseCaseTest {
                 .isInstanceOf(RuntimeException.class)
                 .hasMessageContaining("Error al encriptar clave");
 
-        verify(empleadoRepository, never()).crearEmpleado(any());
+        verify(usuarioRepository, never()).crearUsuario(any());
     }
 
     @Test
@@ -65,25 +68,24 @@ class EmpleadoUseCaseTest {
         empleado.setId(1L);
         empleado.setNombre("Ana");
 
-        when(empleadoRepository.buscarEmpleadoPorId(1L))
-                .thenReturn(java.util.Optional.of(empleado));
+        when(usuarioRepository.buscarUsuarioPorId(1L))
+                .thenReturn(Optional.of(empleado));
 
-        Empleado resultado = empleadoUseCase.buscarEmpleadoPorId(1L);
+        Usuario resultado = empleadoUseCase.buscarEmpleadoPorId(1L);
 
         assertThat(resultado).isNotNull();
         assertThat(resultado.getNombre()).isEqualTo("Ana");
-        verify(empleadoRepository).buscarEmpleadoPorId(1L);
+        verify(usuarioRepository).buscarUsuarioPorId(1L);
     }
 
     @Test
     void buscarEmpleadoPorId_debeRetornarNullCuandoNoExiste() {
-        when(empleadoRepository.buscarEmpleadoPorId(99L))
-                .thenReturn(java.util.Optional.empty());
+        when(usuarioRepository.buscarUsuarioPorId(99L))
+                .thenReturn(Optional.empty());
 
-        Empleado resultado = empleadoUseCase.buscarEmpleadoPorId(99L);
+        Usuario resultado = empleadoUseCase.buscarEmpleadoPorId(99L);
 
         assertThat(resultado).isNull();
-        verify(empleadoRepository).buscarEmpleadoPorId(99L);
+        verify(usuarioRepository).buscarUsuarioPorId(99L);
     }
-
 }

@@ -3,7 +3,7 @@ package co.com.pragma.api;
 import co.com.pragma.api.dto.LoginRequest;
 import co.com.pragma.api.dto.LoginResponse;
 import co.com.pragma.api.security.JwtProvider;
-import co.com.pragma.model.usuario.Usuario;
+import co.com.pragma.model.usuarioLogin.UsuarioLogin;
 import co.com.pragma.usecase.autenticacion.AutenticacionUseCase;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,12 +45,12 @@ public class LoginRest {
             )
             @org.springframework.web.bind.annotation.RequestBody LoginRequest loginRequest
     ) {
-        Usuario usuario = autenticacionUseCase.login(loginRequest.getCorreo(), loginRequest.getClave());
+        UsuarioLogin usuarioLogin = autenticacionUseCase.login(loginRequest.getCorreo(), loginRequest.getClave());
 
-        String token = jwtProvider.generateToken(usuario.getId(), usuario.getRol().name());
+        String token = jwtProvider.generateToken(usuarioLogin.getId(), usuarioLogin.getRol().name());
 
-        LoginResponse response = new LoginResponse(token, usuario.getId(), usuario.getRol());
-        log.info("Login exitoso con el id: {} y el rol: {}", usuario.getId(), response.getRol());
+        LoginResponse response = new LoginResponse(token, usuarioLogin.getId(), usuarioLogin.getRol());
+        log.info("Login exitoso con el id: {} y el rol: {}", usuarioLogin.getId(), response.getRol());
         return ResponseEntity.ok(response);
     }
 }
